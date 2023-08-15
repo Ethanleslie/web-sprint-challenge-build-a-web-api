@@ -20,6 +20,31 @@ async function validateActionId( req, res, next) {
     }
 }
 
+async function validateAction(req, res, next) {
+    try{
+      const {project_id} = req.body
+      const {description} = req.body
+      const {notes} = req.body
+      
+      if(!project_id  || !description || !notes ) {
+          res.status(400).json({
+              message: "name is a required field"
+          })
+      } else {
+          req.project_id = project_id
+          req.description = description
+          req.notes = notes
+          next()
+      }
+  }
+  catch(err){
+      res.status(500).json({
+          message: 'problem finding project',
+      })
+  }
+  }
+
 module.exports = {
-    validateActionId
+    validateActionId,
+    validateAction
 }

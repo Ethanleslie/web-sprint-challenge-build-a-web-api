@@ -20,26 +20,40 @@
 }
 
 async function validateProject(req, res, next) {
-    
-  try{
-    const {name} = req.body
-    const {description} = req.body
-    console.log('name', name , "description" , description)
-    if(!name  || !description ) {
-        res.status(400).json({
-            message: "name is a required field"
-        })
-    } else {
-        req.name = name
-        req.description = description
+    if(req.body.name && req.body.description){
         next()
+    } else{
+        next({status: 400, message: "please provide name and description for the project"})
     }
-}
-catch(err){
-    res.status(500).json({
-        message: 'problem finding project',
-    })
-}
+
+
+
+
+
+
+
+
+
+//   try{
+//     const {name} = req.body
+//     const {description} = req.body
+//     console.log('name', name , "description" , description)
+//     if(name  || description ) {
+        
+//         res.status(400).json({
+//             message: "name is a required field"
+//         })
+//     } else {
+//         req.name = name
+//         req.name = description
+//         next()
+//     }
+// }
+// catch(err){
+//     res.status(500).json({
+//         message: 'problem finding project',
+//     })
+// }
 }
 
 

@@ -20,7 +20,8 @@ router.get('/',  (req, res, next) => {
 })
 
 router.get('/:id', validateProjectId, (req, res) => {
-    res.json(req.user)
+    
+    res.json(req.body)
     
 })
 
@@ -32,23 +33,34 @@ router.post('/', validateProject, (req, res, next) => {
    .catch(next)
 })
 
-router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
-    User.update(req.params.id, {name: req.name, description: req.description})
-    // .then(() => {
-    //     console.log('put then')
-    //     return User.get(req.params.id)
-    // })
-    .then(user => {
-        console.log('req', req.body.name, req.body.description)
-        res.json(user)
-    })
-    .catch(() => {
-        console.log('catch')
-        next()
+// router.put('/:id', validateProject, validateProjectId, (req, res, next) => {
+//     User.update(req.params.id, {name: req.body.name, description: req.body.description})
+//     // .then(() => {
+//     //     console.log('put then')
+//     //     return User.get(req.params.id)
+//     // })
+//     .then(user => {
+//         console.log('req', req.body.name, req.body.description)
+//         res.json(user)
+//     })
+//     .catch(() => {
+//         console.log('catch')
+//         next()
         
-    })
+//     })
     
-})
+// })
+router.put('/:id', validateProject, validateProjectId, (req, res, next) => {
+     const { name, description } = req.body;
+    console.log('req body' , req.body)
+    User.update(req.params.id, {name, description})
+        .then(updatedProject => {
+            res.json(updatedProject);
+        })
+        .catch(err => {
+            next(err);
+        });
+});
 
 router.delete('/:id', validateProjectId, async (req, res, next) => {
     try {
