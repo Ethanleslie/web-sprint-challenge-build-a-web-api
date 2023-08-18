@@ -3,7 +3,8 @@
 const express = require('express')
 const {
     validateProjectId,
-    validateProject
+    validateProject,
+    
 } = require('./projects-middleware')
 
 const User = require('./projects-model')
@@ -20,12 +21,11 @@ router.get('/',  (req, res, next) => {
 })
 
 router.get('/:id', validateProjectId, (req, res) => {
-    
-    res.json(req.body)
+    res.json(req.user)
     
 })
 
-router.post('/', validateProject, (req, res, next) => {
+router.post('/', validateProject,  (req, res, next) => {
  User.insert(req.body)
    .then(newUser => {
     res.status(201).json(newUser)
@@ -50,10 +50,10 @@ router.post('/', validateProject, (req, res, next) => {
 //     })
     
 // })
-router.put('/:id', validateProject, validateProjectId, (req, res, next) => {
-     const { name, description } = req.body;
+router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
+     const { name, description, completed} = req.body;
     console.log('req body' , req.body)
-    User.update(req.params.id, {name, description})
+    User.update(req.params.id, {name, description, completed})
         .then(updatedProject => {
             res.json(updatedProject);
         })

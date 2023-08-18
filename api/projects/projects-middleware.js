@@ -6,27 +6,26 @@
         const user = await User.get(req.params.id)
         console.log('user' , user)
         if(user){
-            req.body = user
+            req.user = user
             next()
         
         }else{
-            next({message: 'error getting project'})
+            next({status: 404, message: 'error getting project'})
         }
     }
     catch (err) { 
-        next({message: 'error finding project'})
+        next({status: 404, message: 'error finding project'})
        
     }
 }
 
 async function validateProject(req, res, next) {
-    if(req.body.name && req.body.description){
+    if(req.body.name && req.body.description && req.body.completed !== undefined){
         next()
     } else{
         next({status: 400, message: "please provide name and description for the project"})
     }
-
-
+}
 
 
 
@@ -38,7 +37,7 @@ async function validateProject(req, res, next) {
 //     const {name} = req.body
 //     const {description} = req.body
 //     console.log('name', name , "description" , description)
-//     if(name  || description ) {
+//     if(!name  || !description ) {
         
 //         res.status(400).json({
 //             message: "name is a required field"
@@ -54,11 +53,12 @@ async function validateProject(req, res, next) {
 //         message: 'problem finding project',
 //     })
 // }
-}
+
 
 
 
  module.exports = {
     validateProjectId,
-    validateProject
+    validateProject,
+    
  }

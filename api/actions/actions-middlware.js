@@ -11,37 +11,21 @@ async function validateActionId( req, res, next) {
             next()
         
         }else{
-            next({message: 'error getting project'})
+            next({status: 404, message: 'error getting project'})
         }
     }
     catch (err) { 
-        next({message: 'error finding project'})
+        next({status: 404, message: 'error finding project'})
        
     }
 }
 
 async function validateAction(req, res, next) {
-    try{
-      const {project_id} = req.body
-      const {description} = req.body
-      const {notes} = req.body
-      
-      if(!project_id  || !description || !notes ) {
-          res.status(400).json({
-              message: "name is a required field"
-          })
-      } else {
-          req.project_id = project_id
-          req.description = description
-          req.notes = notes
-          next()
-      }
-  }
-  catch(err){
-      res.status(500).json({
-          message: 'problem finding project',
-      })
-  }
+    if(req.body.project_id && req.body.description && req.body.notes && req.body.completed !== undefined){
+        next()
+    } else{
+        next({status: 400, message: "please provide name and description for the project"})
+    }
   }
 
 module.exports = {

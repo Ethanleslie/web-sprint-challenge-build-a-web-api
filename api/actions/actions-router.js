@@ -30,8 +30,16 @@ router.post('/', validateAction, (req, res, next) => {
  })
 
 
-router.put('/:id', validateActionId ,(req, res, next) => {
-    
+router.put('/:id', validateActionId, validateAction, (req, res, next) => {
+    const { project_id , description, notes, completed} = req.body;
+    console.log('req body' , req.body)
+    User.update(req.params.id, {project_id, description, notes, completed})
+        .then(updatedProject => {
+            res.json(updatedProject);
+        })
+        .catch(err => {
+            next(err);
+        });
 })
 
 router.delete('/:id', validateActionId, async (req, res, next) => {
